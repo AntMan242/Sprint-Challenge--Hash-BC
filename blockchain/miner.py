@@ -24,11 +24,14 @@ def proof_of_work(last_proof):
 
     start = timer()
 
+    last_p = f'{last_proof}'.encode() #encodes the string
+    last_p_hash = hashlib.sha256(last_p).hexdigest() #Hash creation
+
     print("Searching for next proof")
-    proof = 0
     #  TODO: Your code here
-    while valid_proof(last_proof, proof) is False:
-        proof += 24
+    proof = 789555
+    while valid_proof(last_p_hash, proof) is False:
+        proof += 4
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -44,12 +47,13 @@ def valid_proof(last_hash, proof):
 
     # TODO: Your code here!
     #Old Hash to compare and be used in new hash
-    last_hash_string = json.dumps(last_hash, sort_keys=True).encode()
-    old_hash = hashlib.sha256(last_hash_string).hexdigest()
+    # last_hash_string = json.dumps(last_hash, sort_keys=True).encode()
+    # old_hash = hashlib.sha256(last_hash_string).hexdigest()
     #New Hash using all Proof
-    guess = f'{old_hash}{proof}'.encode()
+    guess = f'{proof}'.encode()
     guess_hash = hashlib.sha256(guess).hexdigest()
-    return guess_hash[:6] == old_hash[-6:]
+
+    return last_hash[-6:] == guess_hash[:6]
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 #  Hint:  You may not need all of these.  Remove the unused functions.
 from hashtables import (HashTable,
                         hash_table_insert,
+
                         hash_table_retrieve,)
 
 
@@ -20,7 +21,7 @@ def reconstruct_trip(tickets, length):
     prevDes = None
     for t in tickets:
 
-        if t.source is None:
+        if t.source is None: #The ticket for the first flight has a destination of None
             hash_table_insert(route[0], t.destination)
             prevDes = t.destination
         elif t.source == prevDes:
