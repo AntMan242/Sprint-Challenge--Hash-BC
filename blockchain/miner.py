@@ -8,6 +8,7 @@ from uuid import uuid4
 from timeit import default_timer as timer
 
 import random
+import json
 
 
 def proof_of_work(last_proof):
@@ -26,6 +27,8 @@ def proof_of_work(last_proof):
     print("Searching for next proof")
     proof = 0
     #  TODO: Your code here
+    while valid_proof(last_proof, proof) is False:
+        proof += 24
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -40,7 +43,13 @@ def valid_proof(last_hash, proof):
     """
 
     # TODO: Your code here!
-    pass
+    #Old Hash to compare and be used in new hash
+    last_hash_string = json.dumps(last_hash, sort_keys=True).encode()
+    old_hash = hashlib.sha256(last_hash_string).hexdigest()
+    #New Hash using all Proof
+    guess = f'{old_hash}{proof}'.encode()
+    guess_hash = hashlib.sha256(guess).hexdigest()
+    return guess_hash[:6] == old_hash[-6:]
 
 
 if __name__ == '__main__':
@@ -58,7 +67,7 @@ if __name__ == '__main__':
     print("ID is", id)
     f.close()
 
-    if id == 'NONAME\n':
+    if id == 'AntMan\n':
         print("ERROR: You must change your name in `my_id.txt`!")
         exit()
     # Run forever until interrupted
